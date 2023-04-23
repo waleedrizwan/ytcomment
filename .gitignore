@@ -1,6 +1,3 @@
-# macOS system files
-.DS_Store
-
 # Node.js files
 node_modules/
 npm-debug.log
@@ -12,7 +9,3 @@ npm-debug.log
 
 # Configuration files
 config.js
-
-# Other files
-*.log
-*.zip
