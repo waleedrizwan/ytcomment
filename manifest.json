@@ -1,0 +1,14 @@
+{
+    "name": "YouTube Analytics Extension",
+    "version": "1.0",
+    "description": "A Chrome extension that displays analytics for a YouTube video.",
+    "manifest_version": 2,
+    "permissions": ["https://www.googleapis.com/*", "tabs"],
+    "content_scripts": [
+      {
+        "matches": ["*://www.youtube.com/watch?v=*"],
+        "js": ["content.js"]
+      }
+    ]
+  }
+  
