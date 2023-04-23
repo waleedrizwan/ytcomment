@@ -1,14 +1,25 @@
 {
-    "name": "YouTube Analytics Extension",
+    "name": "My Comment Analyzer Extension",
+    "description": "A Chrome extension that analyzes YouTube comments and displays statistics.",
     "version": "1.0",
-    "description": "A Chrome extension that displays analytics for a YouTube video.",
     "manifest_version": 2,
-    "permissions": ["https://www.googleapis.com/*", "tabs"],
-    "content_scripts": [
-      {
-        "matches": ["*://www.youtube.com/watch?v=*"],
-        "js": ["content.js"]
-      }
-    ]
+    "icons": {
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    },
+    "permissions": [
+      "activeTab",
+      "storage",
+      "https://www.googleapis.com/*"
+    ],
+    "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+    },
+    "browser_action": {
+      "default_popup": "popup.html",
+      "default_icon": "icon.png"
+    }
   }
   

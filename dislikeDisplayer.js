@@ -1,6 +1,5 @@
 import { API_KEY } from './config.js';
 
-
 // Get the video ID from the YouTube video page URL
 let videoId = window.location.search.split("=")[1];
 
