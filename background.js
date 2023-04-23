@@ -1,3 +1,7 @@
+// Read the API key from the config file
+import { API_KEY } from './config.js';
+
+
 // Retrieve comments for the given video ID using the YouTube Data API
 async function getVideoComments(videoId) {
     const response = await fetch(`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&key=${API_KEY}`);
