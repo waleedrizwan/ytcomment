@@ -1,5 +1,5 @@
 // Read the API key from the config file
-import { API_KEY } from './config.js';
+const API_KEY = 'AIzaSyAYs14Yv_jz17O62rpH5uxgSA5e6EtBzec';
 
 
 // Retrieve comments for the given video ID using the YouTube Data API
