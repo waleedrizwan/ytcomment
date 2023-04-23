@@ -2,10 +2,5 @@
 node_modules/
 npm-debug.log
 
-# Chrome extension files
-*.pem
-*.crx
-*.key
-
 # Configuration files
 config.js
