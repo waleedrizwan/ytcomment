@@ -1,33 +1,43 @@
 // Read the API key from the config file
-const API_KEY = 'AIzaSyAYs14Yv_jz17O62rpH5uxgSA5e6EtBzec';
+let API_KEY;
 
+async function loadConfig() {
+  const response = await fetch(chrome.runtime.getURL('config.json'));
+  const config = await response.json();
+  API_KEY = config.apiKey;
+}
 
-// Retrieve comments for the given video ID using the YouTube Data API
 async function getVideoComments(videoId) {
-    const response = await fetch(`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&key=${API_KEY}`);
-    const data = await response.json();
-    return data.items;
+  console.log("line 12 reached");
+  const response = await fetch(`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&key=${API_KEY}`);
+  const data = await response.json();
+  console.log(data);
+  return data.items;
+}
+
+chrome.runtime.onInstalled.addListener(loadConfig);
+
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  if (message.type === 'getComments') {
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+      const url = tabs[0].url;
+      const videoIdMatch = url.match(/[?&]v=([^&]+)/);
+      if (!videoIdMatch) {
+        console.error('Could not find video ID in URL:', url);
+        sendResponse({ error: 'Could not find video ID in URL.' });
+        return;
+      }
+      const videoId = videoIdMatch[1];
+      getVideoComments(videoId).then((comments) => {
+        if (comments.length === 0) {
+          sendResponse({ comments: comments, error: 'No comments found.' });
+        } else {
+          sendResponse({ comments: comments });
+        }
+      }).catch((error) => {
+        sendResponse({ error: error.message });
+      });
+    });
+    return true; // Tell Chrome we will call sendResponse asynchronously
   }
-  
-  // Get the current tab's URL and extract the video ID
-  function getVideoIdFromUrl(url) {
-    const urlParams = new URLSearchParams(new URL(url).search);
-    return urlParams.get('v');
-  }
-  
-  // Listen for messages from other parts of the extension and respond with comment data
-  chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-    if (message.type === 'getComments') {
-      const { url } = message;
-      const videoId = getVideoIdFromUrl(url);
-      const comments = await getVideoComments(videoId);
-      sendResponse(comments);
-    }
-    return true;
-  });
-  
-  // Send a message to the background script to retrieve the comments for the current video
-  chrome.runtime.sendMessage({ type: 'getComments', url: window.location.href }, function (response) {
-    console.log(response);
-  });
-  
+});

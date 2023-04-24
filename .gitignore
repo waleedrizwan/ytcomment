@@ -5,3 +5,4 @@ npm-debug.log
 # Configuration files
 config.js
 background.js
+config.json
